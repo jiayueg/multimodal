@@ -1,0 +1,1 @@
+nEpoch:  400 lamb_anc:0.00100000 ,knn_auc: 0.00005691 , mse_score: 0.27014759
