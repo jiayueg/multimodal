@@ -152,15 +152,6 @@ def ann2df(adata):
 scicar_data = merge_data(rna_data, atac_data, rna_cells, atac_cells, rna_genes, atac_genes)
 #rna_df, atac_df = ann2df(scicar_data)
 
-from google.colab import drive
-drive.mount('/gdrive')
-
-with open('/gdrive/My Drive/rna.csv', 'w') as f_rna:
-  rna_df.to_csv(f_rna, index=False)
-
-with open('/gdrive/My Drive/atac.csv', 'w') as f_atac:
-  atac_df.to_csv(f_atac, index=False)
-
 """# **define pytorch datasets for RNA and ATAC**"""
 
 class RNA_Dataset(Dataset):
