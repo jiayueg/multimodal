@@ -30,9 +30,9 @@ def knn_auc(adata, proportion_neighbors=0.1, n_svd=100):
     )
     neighbors_match_idx = np.maximum(pred_matches, true_matches)
     neighbors_match += np.sum(np.arange(n_neighbors) >= neighbors_match_idx[:, None], axis = 0,)
-    neighbors_match_curve = neighbors_match/(np.arange(1, n_neighbors + 1) * adata.shape[0])
-    area_under_curve = np.mean(neighbors_match_curve)
-    return area_under_curve
+  neighbors_match_curve = neighbors_match/(np.arange(1, n_neighbors + 1) * adata.shape[0])
+  area_under_curve = np.mean(neighbors_match_curve)
+  return area_under_curve
 
 #MSE
 
