@@ -11,6 +11,7 @@ import os
 import scipy
 from scipy import sparse
 import torch
+import matplotlib.pyplot as plt
 
 #KNN-AUC
 def knn_auc(adata, proportion_neighbors=0.1, n_svd=100):
@@ -51,3 +52,25 @@ def mse(adata):
   error_random = np.mean(np.sum(_square(X_shuffled - Y)))
   error_abs = np.mean(np.sum(_square(X - Y)))
   return error_abs/error_random
+
+
+def plot_multimodal_umap(adata, num_points=None, connect_modalities=False):
+    X=scprep.utils.toarray(adata.obsm["aligned"][:num_points])
+    Y=scprep.utils.toarray(adata.obsm["mode2_aligned"][:num_points])
+    
+    sizes = np.sum(_square(X - Y), axis=1)
+    
+    sizes = 100 * sizes / sizes.max() + 1
+    reduced_data = umap.UMAP().fit_transform(np.vstack([X, Y]))[:, :2]
+    X_reduced, Y_reduced = reduced_data[:len(X)], reduced_data[len(X):]
+
+    plt.figure(figsize=(8, 6), dpi=80)
+        
+    plt.scatter(X_reduced[:, 0], X_reduced[:, 1], s=sizes, alpha=0.5)
+    plt.scatter(Y_reduced[:, 0], Y_reduced[:, 1], s=sizes, alpha=0.5)
+    if connect_modalities:
+        x_coordinates = reduced_data[:, 0].reshape((2, len(X)))
+        y_coordinates = reduced_data[:, 1].reshape((2, len(X)))
+        plt.plot(x_coordinates, y_coordinates, '--', c="green", alpha=0.25)
+
+    plt.show()
