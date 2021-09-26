@@ -274,4 +274,17 @@ def train_test_split(adata, train_prop=0.7):
     train_adata.uns["mode2_obs"] = adata.uns["mode2_obs"][train_cells]
     test_adata = adata[test_mask].copy()
     test_adata.uns["mode2_obs"] = adata.uns["mode2_obs"][test_mask]
+    return train_adata, test_adata, train_cells, test_mask
+
+
+def split_with_mask(adata, indices_train, test_mask):
+    train_adata = adata[indices_train].copy()
+    train_adata.uns["mode2_obs"] = adata.uns["mode2_obs"][indices_train]
+    test_adata = adata[test_mask].copy()
+    test_adata.uns["mode2_obs"] = adata.uns["mode2_obs"][test_mask]
+    return train_adata, test_adata
+
+def split_mask_single(adata, indices_train, test_mask):
+    train_adata = adata[indices_train].copy()
+    test_adata = adata[test_mask].copy()
     return train_adata, test_adata

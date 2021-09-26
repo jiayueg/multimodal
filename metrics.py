@@ -1,4 +1,4 @@
--*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
 import anndata
@@ -84,7 +84,7 @@ def mse(adata):
     return error_abs/error_random
 
 
-def plot_multimodal_umap(adata, num_points=None, connect_modalities=False):
+def plot_multimodal_umap(adata, title, num_points=None, connect_modalities=False):
     """Generates the UMAP plot for alignment.
     
     In the UMAP, one color corresponds to one modality, and the dots
@@ -103,16 +103,18 @@ def plot_multimodal_umap(adata, num_points=None, connect_modalities=False):
     sizes = np.sum(_square(X - Y), axis=1)
     
     sizes = 100 * sizes / sizes.max() + 1
-    reduced_data = umap.UMAP().fit_transform(np.vstack([X, Y]))[:, :2]
+    reduced_data = umap.UMAP(random_state=42).fit_transform(np.vstack([X, Y]))[:, :2]
     X_reduced, Y_reduced = reduced_data[:len(X)], reduced_data[len(X):]
 
     plt.figure(figsize=(8, 6), dpi=80)
         
-    plt.scatter(X_reduced[:, 0], X_reduced[:, 1], s=sizes, alpha=0.5)
-    plt.scatter(Y_reduced[:, 0], Y_reduced[:, 1], s=sizes, alpha=0.5)
+    plt.scatter(X_reduced[:, 0], X_reduced[:, 1], s=sizes, alpha=0.5, label="RNA-seq")
+    plt.scatter(Y_reduced[:, 0], Y_reduced[:, 1], s=sizes, alpha=0.5, label="ATAC")
     if connect_modalities:
         x_coordinates = reduced_data[:, 0].reshape((2, len(X)))
         y_coordinates = reduced_data[:, 1].reshape((2, len(X)))
         plt.plot(x_coordinates, y_coordinates, '--', c="green", alpha=0.25)
-
+    plt.title(title)
+    plt.legend()
+    
     plt.show()
